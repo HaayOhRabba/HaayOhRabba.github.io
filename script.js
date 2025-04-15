@@ -1,215 +1,117 @@
 document.addEventListener('DOMContentLoaded', () => {
-
   // --- Dark/Light Mode Toggle ---
-  const modeToggle = document.getElementById("modeToggle");
-  const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+  const modeToggleButton = document.getElementById('modeToggle');
+  const currentTheme = localStorage.getItem('theme');
 
-  // Function to apply the theme
-  function setTheme(isDark) {
-    if (isDark) {
-      document.body.classList.remove("light-mode");
-      if (modeToggle) modeToggle.textContent = "🌙";
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.body.classList.add("light-mode");
-      if (modeToggle) modeToggle.textContent = "☀️";
-      localStorage.setItem('theme', 'light');
-    } // <-- Added missing brace
-  } // <-- Added missing brace
-
-  // Initialize theme based on saved preference or OS setting
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    setTheme(savedTheme === 'dark');
+  // Apply saved theme on load
+  if (currentTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      if(modeToggleButton) modeToggleButton.textContent = '☀️'; // Sun icon for dark mode
   } else {
-    setTheme(prefersDarkScheme.matches);
-  } // <-- Added missing brace
+      if(modeToggleButton) modeToggleButton.textContent = '🌙'; // Moon icon for light mode
+  }
 
-  // Add event listener for the toggle button
-  if (modeToggle) {
-    modeToggle.addEventListener("click", () => {
-      const isCurrentlyLight = document.body.classList.contains("light-mode");
-      setTheme(!isCurrentlyLight); // Toggle the theme
-    }); // <-- Added missing brace
-  } // <-- Added missing brace
+  if(modeToggleButton) {
+      modeToggleButton.addEventListener('click', () => {
+          document.body.classList.toggle('dark-mode');
 
-  // Optional: Listen for changes in OS theme preference
-  prefersDarkScheme.addEventListener("change", (e) => {
-    // Only change if the user hasn't manually set a theme via the button
-    if (!localStorage.getItem('theme')) {
-      setTheme(e.matches);
-    } // <-- Added missing brace
-  }); // <-- Added missing brace
+          let theme = 'light';
+          if (document.body.classList.contains('dark-mode')) {
+              theme = 'dark';
+              modeToggleButton.textContent = '☀️'; // Sun icon
+          } else {
+               modeToggleButton.textContent = '🌙'; // Moon icon
+          }
+          localStorage.setItem('theme', theme); // Save preference
+      });
+  }
 
-  // --- Q2: Event Logging (Click & View) ---
-  function getElementDescription(element) {
-    if (!element) return 'unknown';
-
-    const tagName = element.tagName.toLowerCase();
-    let description = tagName; // Default to tag name
-
-    if (element.id) {
-      description += `#${element.id}`;
-    } else if (element.classList.length > 0) {
-      description += `.${element.classList[0]}`; // Use first class
-    }
-
-    // Add more specific info based on tag
-    switch (tagName) {
-      case 'a':
-        description += ` (href: ${element.getAttribute('href') || 'N/A'})`;
-        break;
-      case 'button':
-        description += ` (text: ${element.textContent.trim().slice(0, 20) || 'N/A'})`;
-        break;
-      case 'img':
-        description += ` (src: ${element.getAttribute('src')?.split('/').pop() || 'N/A'})`; // Just filename
-        break;
-      case 'input':
-      case 'textarea':
-      case 'select':
-        description += ` (name: ${element.name || 'N/A'})`;
-        break;
-      case 'section':
-         const heading = element.querySelector('h1, h2, h3');
-         description += ` (heading: ${heading ? heading.textContent.trim().slice(0,30) : 'N/A'})`;
-         break;
-      default:
-        // Use the generated ID/class description
-        break;
-    } // <-- Added missing brace for switch
-    return description;
-  } // <-- Added missing brace for function
-
-  function logEvent(type, element) {
-    const timestamp = new Date().toLocaleString();
-    const description = getElementDescription(element);
-    // Format: Timestamp_of_click , type of event (click/view) , event object (description)
-    console.log(`${timestamp}, ${type}, ${description}`);
-  } // <-- Added missing brace for function
-
-  // Log Clicks on specific interactive elements
-  document.body.addEventListener("click", (e) => {
-    const targetElement = e.target.closest('a, button, input, select, textarea, img'); // Target specific elements
-    if (targetElement) {
-      logEvent("click", targetElement);
-    } // <-- Added missing brace
-  }); // <-- Added missing brace
-
-  // Log Section Views (and potentially other specified elements)
-  const elementsToObserve = document.querySelectorAll('section, header, footer, nav, .card, .profile-image'); // Define elements to observe for views
-  if (elementsToObserve.length > 0) {
-    const viewObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (!entry.target.dataset.viewLogged) { // Log only once per session unless reset
-            logEvent("view", entry.target);
-            entry.target.dataset.viewLogged = 'true';
-            // Optional: Reset log flag after a delay if needed for re-logging views
-            // setTimeout(() => { delete entry.target.dataset.viewLogged; }, 60000);
-          } // <-- Added missing brace for inner if
-        } else {
-            // Optionally reset the flag when it goes out of view
-             delete entry.target.dataset.viewLogged;
-        } // <-- Added missing brace for else
-      }); // <-- Added missing brace for forEach
-    }, { threshold: 0.5 }); // Log when 50% visible
-
-    elementsToObserve.forEach(el => viewObserver.observe(el));
-  } // <-- Added missing brace for outer if
-
-  // --- Active Navigation Link Highlighting ---
-  const navLinks = document.querySelectorAll('.nav-links a');
-  const currentPath = window.location.pathname.split("/").pop() || "index.html";
-  navLinks.forEach(link => {
-    const linkPath = link.getAttribute('href')?.split("/").pop() || "index.html";
-    if (linkPath === currentPath) {
-      link.classList.add('active');
-    } else {
-      link.classList.remove('active');
-    } // <-- Added missing brace
-  }); // <-- Added missing brace
-
-  // --- Q3: Text Analyzer Logic ---
-  const textInput = document.getElementById('textInput');
+  // --- Text Analyzer Logic ---
   const analyzeButton = document.getElementById('analyzeButton');
+  const textInput = document.getElementById('textInput');
   const analysisResult = document.getElementById('analysisResult');
 
-  // Only run if we are on the analyzer page (elements exist)
-  if (textInput && analyzeButton && analysisResult) {
+  // Only run analyzer logic if the elements exist (i.e., on analyzer.html)
+  if (analyzeButton && textInput && analysisResult) {
+      analyzeButton.addEventListener('click', () => {
+          const text = textInput.value;
+          analysisResult.textContent = 'Analyzing...'; // Provide immediate feedback
 
-    // Define word lists (lowercase)
-    const PRONOUNS = new Set(['i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them', 'myself', 'yourself', 'himself', 'herself', 'itself', 'ourselves', 'yourselves', 'themselves', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'mine', 'yours', 'hers', 'ours', 'theirs']);
-    const PREPOSITIONS = new Set(['aboard', 'about', 'above', 'across', 'after', 'against', 'along', 'amid', 'among', 'around', 'as', 'at', 'before', 'behind', 'below', 'beneath', 'beside', 'between', 'beyond', 'but', 'by', 'concerning', 'considering', 'despite', 'down', 'during', 'except', 'following', 'for', 'from', 'in', 'inside', 'into', 'like', 'minus', 'near', 'next', 'of', 'off', 'on', 'onto', 'opposite', 'out', 'outside', 'over', 'past', 'per', 'plus', 'regarding', 'round', 'save', 'since', 'than', 'through', 'to', 'toward', 'under', 'underneath', 'unlike', 'until', 'up', 'upon', 'versus', 'via', 'with', 'within', 'without']);
-    const INDEFINITE_ARTICLES = new Set(['a', 'an']);
+          // Use setTimeout to avoid blocking the UI thread for potentially large text
+          setTimeout(() => {
+              if (text.trim() === '') {
+                  analysisResult.textContent = 'Please enter some text to analyze.';
+                  return;
+              }
 
-    analyzeButton.addEventListener('click', () => {
-      const text = textInput.value;
-      let resultsText = "";
+              try {
+                  const results = performAnalysis(text);
+                  displayResults(results);
+              } catch (error) {
+                  console.error("Analysis error:", error);
+                  analysisResult.textContent = "An error occurred during analysis. Please check the console.";
+              }
 
-      try {
-        // Basic Counts
-        const letterCount = (text.match(/[a-zA-Z]/g) || []).length;
-        const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-        const spaceCount = (text.match(/ /g) || []).length;
-        const newlineCount = (text.match(/\n/g) || []).length;
-        const specialSymbolCount = (text.match(/[^a-zA-Z0-9\s]/g) || []).length;
+          }, 50); // Short delay to allow UI update
+      });
+  }
+});
 
-        resultsText += `--- Basic Counts ---\n`;
-        resultsText += `Letters: ${letterCount}\n`;
-        resultsText += `Words: ${wordCount}\n`;
-        resultsText += `Spaces: ${spaceCount}\n`;
-        resultsText += `Newlines: ${newlineCount}\n`;
-        resultsText += `Special Symbols: ${specialSymbolCount}\n\n`;
+// Function to perform the text analysis
+function performAnalysis(text) {
+  const analysis = {};
 
-        // Tokenization
-        const tokens = (text.toLowerCase().match(/\b[a-z']+\b/g) || []);
+  // 1. Character Count (including spaces and newlines)
+  analysis.charCount = text.length;
 
-        // Grouped Counts
-        const pronounCounts = {};
-        const prepositionCounts = {};
-        const indefiniteArticleCounts = {};
+  // 2. Letter Count (alphabetic characters only)
+  const letters = text.match(/[a-zA-Z]/g);
+  analysis.letterCount = letters ? letters.length : 0;
 
-        tokens.forEach(token => {
-          if (PRONOUNS.has(token)) {
-            pronounCounts[token] = (pronounCounts[token] || 0) + 1;
-          } // <-- Added missing brace
-          if (PREPOSITIONS.has(token)) {
-            prepositionCounts[token] = (prepositionCounts[token] || 0) + 1;
-          } // <-- Added missing brace
-          if (INDEFINITE_ARTICLES.has(token)) {
-            indefiniteArticleCounts[token] = (indefiniteArticleCounts[token] || 0) + 1;
-          } // <-- Added missing brace
-        }); // <-- Added missing brace for forEach
+  // 3. Space Count
+  const spaces = text.match(/ /g);
+  analysis.spaceCount = spaces ? spaces.length : 0;
 
-        // Format Grouped Results
-        function formatGroupedCounts(title, counts) {
-          let output = `--- ${title} ---\n`;
-          const sortedKeys = Object.keys(counts).sort();
-          if (sortedKeys.length === 0) {
-            output += "None found.\n";
-          } else {
-            sortedKeys.forEach(key => {
-              output += `${key}: ${counts[key]}\n`;
-            }); // <-- Added missing brace
-          } // <-- Added missing brace
-          return output + "\n";
-        } // <-- Added missing brace for function
+  // 4. Word Count (simple split by whitespace)
+  const words = text.trim().split(/\s+/);
+  analysis.wordCount = words[0] === '' ? 0 : words.length; // Handle empty input case
 
-        resultsText += formatGroupedCounts("Pronoun Counts", pronounCounts);
-        resultsText += formatGroupedCounts("Preposition Counts", prepositionCounts);
-        resultsText += formatGroupedCounts("Indefinite Article Counts", indefiniteArticleCounts);
+  // Define lists for specific word types (case-insensitive matching)
+  const pronouns = /\b(I|me|my|mine|we|us|our|ours|you|your|yours|he|him|his|she|her|hers|it|its|they|them|their|theirs)\b/gi;
+  const prepositions = /\b(about|above|across|after|against|along|amid|among|around|at|before|behind|below|beneath|beside|between|beyond|but|by|concerning|despite|down|during|except|for|from|in|inside|into|like|near|of|off|on|onto|out|outside|over|past|regarding|since|through|throughout|to|toward|under|underneath|until|unto|up|upon|with|within|without)\b/gi;
+  const indefiniteArticles = /\b(a|an)\b/gi;
 
-        // Display results
-        analysisResult.textContent = resultsText;
-        logEvent('analyze', 'Text Analysis Performed');
+  // 5. Pronoun Count
+  const pronounMatches = text.match(pronouns);
+  analysis.pronounCount = pronounMatches ? pronounMatches.length : 0;
 
-      } catch (error) {
-        analysisResult.textContent = "Error analyzing text. Please check the input or console for details.";
-        console.error("Text Analysis Error:", error);
-        logEvent('error', 'Text Analysis Failed');
-      } // <-- Added missing brace for catch
-    }); // <-- Added missing brace for event listener
-  } // End if (analyzer elements exist) <-- Added missing brace
+  // 6. Preposition Count
+  const prepositionMatches = text.match(prepositions);
+  analysis.prepositionCount = prepositionMatches ? prepositionMatches.length : 0;
 
-}); // End DOMContentLoaded
+  // 7. Indefinite Article Count
+  const articleMatches = text.match(indefiniteArticles);
+  analysis.indefiniteArticleCount = articleMatches ? articleMatches.length : 0;
+
+  return analysis;
+}
+
+// Function to display analysis results
+function displayResults(results) {
+  const analysisResult = document.getElementById('analysisResult');
+  if (analysisResult) {
+      analysisResult.textContent = `
+Analysis Results:
+-----------------
+Total Characters: ${results.charCount}
+Letter Count:     ${results.letterCount}
+Space Count:      ${results.spaceCount}
+Word Count:       ${results.wordCount}
+
+Pronoun Count:           ${results.pronounCount}
+Preposition Count:       ${results.prepositionCount}
+Indefinite Article Count (a/an): ${results.indefiniteArticleCount}
+      `;
+  }
+}
+
