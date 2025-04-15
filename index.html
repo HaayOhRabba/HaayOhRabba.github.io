@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Name - Web Developer & Designer</title> <!-- CHANGE TITLE -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio of Your Name, showcasing web development and design projects."> <!-- ADD DESCRIPTION -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Link a professional font like Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="main-nav container">
+      <div class="nav-logo">
+        <a href="index.html">Your Name</a> <!-- CHANGE TO YOUR NAME/BRAND -->
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="education.html">Education</a>
+        <a href="skills.html">Skills</a>
+        <a href="cv.html">CV</a>
+        <a href="analyzer.html">Analyzer</a> <!-- Remove if not needed -->
+      </div>
+       <div class="nav-actions">
+          <button id="modeToggle" title="Toggle dark/light mode">🌙</button>
+          <!-- Mobile menu toggle button would go here if implemented -->
+       </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>Building Digital Experiences</h1> <!-- CHANGE HEADLINE -->
+        <p class="subtitle">
+          I'm Your Name, a passionate Web Developer specializing in creating clean,
+          performant, and user-centered applications. Let's build something great together.
+          <!-- UPDATE THIS TEXT -->
+        </p>
+        <div class="hero-actions">
+          <a href="about.html" class="button button-primary">Learn More</a>
+          <a href="skills.html" class="button button-secondary">View Skills</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Content Section -->
+    <section class="content-section featured-content">
+       <div class="container">
+          <h2>What I Do</h2>
+          <div class="grid-container cols-3">
+              <div class="grid-item card">
+                  <div class="card-icon">💡</div> <!-- You can replace with <img> or SVG later -->
+                  <h3>Web Development</h3>
+                  <p>Crafting responsive and robust websites using modern technologies like HTML, CSS, JavaScript, and frameworks.</p>
+                  <a href="skills.html" class="text-link">Tech Stack &rarr;</a>
+              </div>
+              <div class="grid-item card">
+                   <div class="card-icon">🎨</div>
+                  <h3>UI/UX Focus</h3>
+                  <p>Designing intuitive and engaging user interfaces with a focus on usability and accessibility.</p>
+                   <a href="about.html" class="text-link">My Approach &rarr;</a>
+              </div>
+               <div class="grid-item card">
+                    <div class="card-icon">🚀</div>
+                  <h3>Performance</h3>
+                  <p>Optimizing applications for speed and efficiency, ensuring a smooth user experience across devices.</p>
+                  <!-- Link to relevant section or project if you add one -->
+                  <!-- <a href="#projects" class="text-link">See Projects &rarr;</a> -->
+              </div>
+          </div>
+       </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <!-- Footer Content -->
+      <p>&copy; 2025 Your Name. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

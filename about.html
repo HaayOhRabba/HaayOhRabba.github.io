@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Me - Your Name</title> <!-- CHANGE TITLE -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn more about Your Name, a web developer and designer."> <!-- ADD DESCRIPTION -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Link the same professional font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="main-nav container">
+      <div class="nav-logo">
+        <a href="index.html">Your Name</a> <!-- CHANGE TO YOUR NAME/BRAND -->
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active">About</a> <!-- Active class here -->
+        <a href="education.html">Education</a>
+        <a href="skills.html">Skills</a>
+        <a href="cv.html">CV</a>
+        <a href="analyzer.html">Analyzer</a> <!-- Remove if not needed -->
+      </div>
+       <div class="nav-actions">
+          <button id="modeToggle" title="Toggle dark/light mode">🌙</button>
+          <!-- Mobile menu toggle button would go here if implemented -->
+       </div>
+    </nav>
+  </header>
+
+  <main id="main-content" class="about-page-content"> <!-- Optional class -->
+
+    <!-- About Me Content Section -->
+    <section class="content-section">
+       <div class="container">
+          <h2>About Me</h2>
+
+          <!-- Add your profile picture -->
+          <!-- Create an 'images' folder or similar -->
+          <img src="images/profile-placeholder.png" alt="Your Name - Profile Picture" class="profile-image">
+          <!-- === IMPORTANT: Replace 'images/profile-placeholder.png' with the actual path to your picture === -->
+
+          <!-- === Paragraph about yourself (Requirement 1) === -->
+          <p>
+            Hello! I'm Your Name, a creative web developer based in [Your Location]. I love building visually appealing, user-friendly,
+            and interactive web experiences. I'm passionate about clean code, elegant design, functionality, and
+            constantly learning new things in the ever-evolving tech landscape. My focus is on writing efficient code and creating interfaces that are not only aesthetically pleasing but also intuitive and accessible to everyone. I enjoy tackling challenges and finding elegant solutions to complex problems.
+            <!-- === EXPAND THIS WITH YOUR OWN WORDS === -->
+          </p>
+
+          <!-- Pictures from birthplace (Requirement 2) -->
+          <h3>From My Birthplace: [Name of Birthplace]</h3>
+          <div class="grid-container cols-2"> <!-- Or cols-3 -->
+              <div class="grid-item">
+                  <img src="images/birthplace1.jpg" alt="Description of birthplace picture 1">
+                  <!-- === IMPORTANT: Replace 'images/birthplace1.jpg' and add description === -->
+              </div>
+               <div class="grid-item">
+                  <img src="images/birthplace2.jpg" alt="Description of birthplace picture 2">
+                  <!-- === IMPORTANT: Replace 'images/birthplace2.jpg' and add description === -->
+              </div>
+              <!-- Add more grid items for more pictures -->
+          </div>
+
+          <p>
+            When I'm not coding, you can find me [mention a hobby or interest, e.g., exploring new cafes, hiking, reading tech blogs].
+            Feel free to browse my skills or check out my CV!
+          </p>
+
+       </div>
+    </section>
+
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <!-- Footer Content -->
+      <p>&copy; 2025 Your Name. All rights reserved.</p>
+
+      <!-- Optional: Add social media links here if desired -->
+      <!--
+      <div class="social-links">
+        <a href="YOUR_LINKEDIN_URL" target="_blank" rel="noopener noreferrer">LinkedIn</a> |
+        <a href="YOUR_GITHUB_URL" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+      -->
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
